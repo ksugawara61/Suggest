@@ -56,17 +56,17 @@ public class SuggestTask implements Runnable {
 
             // Google APIのためのRESTfulクエリを組み立てる
             String q = URLEncoder.encode(original, "UTF-8");
-            /*URL url = new URL(
-                    "http://google.com/complete/search?output=toolbar&q="
-                    + q);*/
-
             URL url = new URL(
-                    "http://ff.search.yahoo.com/gossip?output=xml&command="
+                    "http://google.com/complete/search?output=toolbar&q="
                     + q);
 
+            /*URL url = new URL(
+                    "http://ff.search.yahoo.com/gossip?output=xml&command="
+                    + q);*/
+
             con = (HttpURLConnection)url.openConnection();
-            con.setReadTimeout(10000);
-            con.setConnectTimeout(15000);
+            con.setReadTimeout(1000);
+            con.setConnectTimeout(1500);
             con.setRequestMethod("GET");
             con.addRequestProperty("Referer",
                     "http://www.pragprog.com/book/eband4");
@@ -111,6 +111,10 @@ public class SuggestTask implements Runnable {
                     + " " + e.toString();
         } catch (InterruptedException e) {
             Log.e(TAG, "InterruptedException", e);
+            error = suggest.getResources().getString(R.string.error)
+                    + " " + e.toString();
+        } catch (Exception e) {
+            Log.e(TAG, "Exception", e);
             error = suggest.getResources().getString(R.string.error)
                     + " " + e.toString();
         } finally {
